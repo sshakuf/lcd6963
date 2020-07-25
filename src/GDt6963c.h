@@ -32,12 +32,19 @@
 #define GLCD_CTRL_PIN PINC
 #define GLCD_CTRL_DDR DDRC
 // control signals
-#define GLCD_WR 0
-#define GLCD_RD 1
-#define GLCD_CE 2
-#define GLCD_CD 3
+#define GLCD_WR 2
+#define GLCD_RD 3
+#define GLCD_CE 0
+#define GLCD_CD 1
 #define GLCD_RESET 4
 #define GLCD_FS 5
+// #define GLCD_WR 0   37
+// #define GLCD_RD 1   36
+// #define GLCD_CE 2   35
+// #define GLCD_CD 3   34
+// #define GLCD_RESET 4 33
+// #define GLCD_FS 5    32
+
 // display properties
 #define GLCD_NUMBER_OF_LINES 64
 #define GLCD_PIXELS_PER_LINE 240

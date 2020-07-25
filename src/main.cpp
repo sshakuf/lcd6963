@@ -66,3 +66,8 @@ void loop()
 // 18     D7          42
 // 19    FS1        GND
 // 20     gnd signal low
+
+
+
+// https://diyi0t.com/arduino-mega-tutorial/
+// https://www.arduino.cc/en/Hacking/PinMapping2560
