@@ -2,36 +2,36 @@
 // http://en.radzio.dxp.pl/t6963/
 
 #include <Arduino.h>
- #include "GDT6963C.h"
+#include "GDT6963C.h"
 
 void setup()
 {
   pinMode(LED_BUILTIN, OUTPUT);
- Serial.begin(921600);
+  Serial.begin(921600);
 
   Serial.println("__________________________________________________________________");
 
- Serial.println("Once");
-    GLCD_Initalize();                     // Initalize LCD
-    Serial.println("GLCD_Initalize END");
+  Serial.flush();
+  Serial.println("Once");
 
- 
-    GLCD_ClearText();                     // Clear text area
-    Serial.println("GLCD_ClearText");
-    GLCD_ClearCG();                       // Clear character generator area
-    Serial.println("GLCD_ClearCG");
-    GLCD_ClearGraphic();                  // Clear graphic area
-    Serial.println("GLCD_ClearGraphic");
-    Serial.flush();
-    GLCD_TextGoTo(0, 0);                  // set text coordinates
-    Serial.println("GLCD_TextGoTo");
-    GLCD_WriteString("Hello world !!! "); // write text
-    Serial.println("GLCD_WriteString");
-    
-    Serial.println("MAIN Done");
-    
-    Serial.flush();
+  GLCD_Initalize(); // Initalize LCD
+  Serial.println("GLCD_Initalize END");
 
+  GLCD_ClearText(); // Clear text area
+  Serial.println("GLCD_ClearText");
+  GLCD_ClearCG(); // Clear character generator area
+  Serial.println("GLCD_ClearCG");
+  GLCD_ClearGraphic(); // Clear graphic area
+  Serial.println("GLCD_ClearGraphic");
+  Serial.flush();
+  GLCD_TextGoTo(0, 0); // set text coordinates
+  Serial.println("GLCD_TextGoTo");
+  GLCD_WriteString("Hello world !!! "); // write text
+  Serial.println("GLCD_WriteString");
+
+  Serial.println("MAIN Done");
+
+  Serial.flush();
 }
 
 bool once = false;
@@ -40,7 +40,7 @@ void loop()
 {
 
   // //PORT A FOR SEGMENT 1
-   DDRA = B11111111; //initialize port pins as output 22-29
+  DDRA = B11111111; //initialize port pins as output 22-29
   // // //sets both segment as zero
   //  PORTA = B11111111;
   // PORTA = 0;
@@ -51,7 +51,6 @@ void loop()
   // digitalWrite(24, HIGH); // turn the LED on (HIGH is the voltage level)
 
   digitalWrite(LED_BUILTIN, HIGH); // turn the LED on (HIGH is the voltage level)
-
 
   if (!once)
   {
@@ -71,10 +70,9 @@ void loop()
     // once = true;
   }
 
-  delay(1000);                     // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);  // turn the LED off by making the voltage LOW
-  delay(1000);                     // wait for a second
-
+  delay(1000);                    // wait for a second
+  digitalWrite(LED_BUILTIN, LOW); // turn the LED off by making the voltage LOW
+  delay(1000);                    // wait for a second
 
   //  delay(1000);
   //  GLCD_TextGoTo(3, 3);         // set text coordinates
@@ -109,11 +107,8 @@ void loop()
 // 19    FS1        GND
 // 20     gnd signal low
 
-
-
 // https://diyi0t.com/arduino-mega-tutorial/
 // https://www.arduino.cc/en/Hacking/PinMapping2560
-
 
 // https://www.quora.com/What-is-DDRB-PORTB-and-PINB-and-what-do-they-do-What-does-it-mean-if-a-port-or-pin-is-an-output-pin
 // https://lynx2015.files.wordpress.com/2015/08/arduino-mega-pinout-diagram.png

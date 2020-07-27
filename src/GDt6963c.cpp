@@ -1,4 +1,4 @@
-#ifdef xxx
+#ifdef VER1
 
 //-------------------------------------------------------------------------------------------------
 // Graphic LCD with Toshiba T6963 controller
@@ -34,7 +34,7 @@ void GLCD_InitalizeInterface(void)
   //GLCD_DATA_DDR = 0xFF;
   GLCD_DATA_DDR1 |= GLCD_DATA_MASK1;
   // GLCD_DATA_DDR2 |= GLCD_DATA_MASK2;
-  
+
   GLCD_CTRL_DDR = ((1 << GLCD_WR) | (1 << GLCD_RD) | (1 << GLCD_CE) | (1 << GLCD_CD) | (1 << GLCD_RESET) | (1 << GLCD_FS));
   GLCD_CTRL_PORT |= ((1 << GLCD_WR) | (1 << GLCD_RD) | (1 << GLCD_CE) | (1 << GLCD_CD) | (1 << GLCD_RESET) | (1 << GLCD_FS));
 }
@@ -52,7 +52,7 @@ unsigned char GLCD_ChceckStatus(void)
   GLCD_DATA_DDR1 &= ~GLCD_DATA_MASK1;
 
   // int x = 0xff;
-  // x &= ~((1 << GLCD_RD) | (1 << GLCD_CE)); 
+  // x &= ~((1 << GLCD_RD) | (1 << GLCD_CE));
   // Serial.println( String(x, BIN) );
 
   GLCD_CTRL_PORT &= ~((1 << GLCD_RD) | (1 << GLCD_CE));
@@ -80,7 +80,7 @@ unsigned char GLCD_ChceckStatus(void)
 void GLCD_WriteCommand(unsigned char command)
 {
 
-  while (!(GLCD_ChceckStatus() ))
+  while (!(GLCD_ChceckStatus()))
     ;
   // Serial.println("GLCD_WriteCommand - " + String(command, HEX));
 
@@ -126,7 +126,7 @@ void GLCD_WriteData(unsigned char data)
 unsigned char GLCD_ReadData(void)
 {
   uint8_t tmp;
-  while (!(GLCD_ChceckStatus() ))
+  while (!(GLCD_ChceckStatus()))
     ;
   //GLCD_DATA_DDR = 0x00;
   GLCD_DATA_DDR1 &= ~GLCD_DATA_MASK1;
@@ -134,7 +134,7 @@ unsigned char GLCD_ReadData(void)
 
   GLCD_CTRL_PORT &= ~((1 << GLCD_RD) | (1 << GLCD_CE) | (1 << GLCD_CD));
   n_delay();
-  
+
   //tmp = GLCD_DATA_PIN;
   tmp = GLCD_DATA_PIN1;
   // tmp = (GLCD_DATA_PIN1 GLCD_DATA_RSHIFT1) | (GLCD_DATA_PIN2 GLCD_DATA_RSHIFT2);
@@ -225,11 +225,21 @@ void GLCD_WriteChar(char charCode)
 void GLCD_WriteString(char *string)
 {
   Serial.println("GLCD_WriteString");
-  while (*string)
-  {
-    Serial.println(*string);
-    GLCD_WriteChar(*string++);
-  }
+  GLCD_WriteChar('a');
+  GLCD_WriteChar('a');
+  GLCD_WriteChar('a');
+  GLCD_WriteChar('a');
+  GLCD_WriteChar('a');
+  GLCD_WriteChar('a');
+  GLCD_WriteChar('a');
+  GLCD_WriteChar('a');
+  GLCD_WriteChar('a');
+
+  // while (*string)
+  // {
+  //   Serial.println(*string);
+  //   GLCD_WriteChar(*string++);
+  // }
 }
 //-------------------------------------------------------------------------------------------------
 //
@@ -347,7 +357,7 @@ void GLCD_Bitmap(unsigned char *bitmap, unsigned char x, unsigned char y, unsign
 //-------------------------------------------------------------------------------------------------
 void GLCD_Initalize(void)
 {
-    Serial.println("GLCD_Initalize");
+  Serial.println("GLCD_Initalize");
 
   GLCD_InitalizeInterface();
 
@@ -375,22 +385,21 @@ void GLCD_Initalize(void)
   GLCD_WriteData(0x00);
   GLCD_WriteCommand(T6963_SET_TEXT_AREA);
 
-    Serial.println("T6963_SET_TEXT_AREA ");
+  Serial.println("T6963_SET_TEXT_AREA ");
 
   GLCD_WriteData(GLCD_OFFSET_REGISTER);
-    Serial.println("GLCD_OFFSET_REGISTER ");
+  Serial.println("GLCD_OFFSET_REGISTER ");
   GLCD_WriteData(0x00);
-    Serial.println("GLCD_WriteData(0x00) ");
+  Serial.println("GLCD_WriteData(0x00) ");
   GLCD_WriteCommand(T6963_SET_OFFSET_REGISTER);
-    Serial.println("T6963_SET_OFFSET_REGISTER ");
-delay(1000);
+  Serial.println("T6963_SET_OFFSET_REGISTER ");
+  delay(1000);
   GLCD_WriteCommand(T6963_DISPLAY_MODE | T6963_GRAPHIC_DISPLAY_ON | T6963_TEXT_DISPLAY_ON /*| T6963_CURSOR_DISPLAY_ON*/);
-    Serial.println("T6963_DISPLAY_MODE ");
+  Serial.println("T6963_DISPLAY_MODE ");
 
   GLCD_WriteCommand(T6963_MODE_SET | 0);
-    Serial.println("T6963_MODE_SET ");
+  Serial.println("T6963_MODE_SET ");
 
-    Serial.println("GLCD_Initalize END");
-  
+  Serial.println("GLCD_Initalize END");
 }
 #endif

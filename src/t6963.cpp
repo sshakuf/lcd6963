@@ -1,4 +1,4 @@
-#ifndef yyy
+#ifndef VER2
 
 //-------------------------------------------------------------------------------------------------
 // Graphic LCD with Toshiba T6963 controller
@@ -10,14 +10,14 @@
 //-------------------------------------------------------------------------------------------------
 //
 // Delay function
-//	
+//
 //-------------------------------------------------------------------------------------------------
 void ndelay(void)
 {
-volatile unsigned char i;
-for(i = 0; i < (F_CPU/1000000); i++)
+  volatile unsigned char i;
+  for (i = 0; i < (F_CPU / 1000000); i++)
   {
-  asm("nop");
+    asm("nop");
   }
 }
 //-------------------------------------------------------------------------------------------------
@@ -27,9 +27,9 @@ for(i = 0; i < (F_CPU/1000000); i++)
 //-------------------------------------------------------------------------------------------------
 void GLCD_InitalizeInterface(void)
 {
-GLCD_DATA_DDR = 0xFF;
-GLCD_CTRL_DDR = ((1 << GLCD_WR) | (1 << GLCD_RD) | (1 << GLCD_CE) | (1 << GLCD_CD) | (1 << GLCD_RESET) | (1 << GLCD_FS));
-GLCD_CTRL_PORT |= ((1 << GLCD_WR) | (1 << GLCD_RD) | (1 << GLCD_CE) | (1 << GLCD_CD) | (1 << GLCD_RESET) | (1 << GLCD_FS));
+  GLCD_DATA_DDR = 0xFF;
+  GLCD_CTRL_DDR = ((1 << GLCD_WR) | (1 << GLCD_RD) | (1 << GLCD_CE) | (1 << GLCD_CD) | (1 << GLCD_RESET) | (1 << GLCD_FS));
+  GLCD_CTRL_PORT |= ((1 << GLCD_WR) | (1 << GLCD_RD) | (1 << GLCD_CE) | (1 << GLCD_CD) | (1 << GLCD_RESET) | (1 << GLCD_FS));
 }
 //-------------------------------------------------------------------------------------------------
 //
@@ -38,29 +38,30 @@ GLCD_CTRL_PORT |= ((1 << GLCD_WR) | (1 << GLCD_RD) | (1 << GLCD_CE) | (1 << GLCD
 //-------------------------------------------------------------------------------------------------
 unsigned char GLCD_ChceckStatus(void)
 {
-uint8_t tmp;
-GLCD_DATA_DDR = 0x00;
+  uint8_t tmp;
+  GLCD_DATA_DDR = 0x00;
 
-GLCD_CTRL_PORT &= ~((1 << GLCD_RD) | (1 << GLCD_CE));
-ndelay();
-tmp = GLCD_DATA_PIN;
-GLCD_DATA_DDR = 0xFF;
-GLCD_CTRL_PORT |= ((1 << GLCD_RD) | (1 << GLCD_CE));
-return tmp;
+  GLCD_CTRL_PORT &= ~((1 << GLCD_RD) | (1 << GLCD_CE));
+  ndelay();
+  tmp = GLCD_DATA_PIN;
+  GLCD_DATA_DDR = 0xFF;
+  GLCD_CTRL_PORT |= ((1 << GLCD_RD) | (1 << GLCD_CE));
+  return tmp;
 }
 //-------------------------------------------------------------------------------------------------
 //
-// Writes instruction 
+// Writes instruction
 //
 //-------------------------------------------------------------------------------------------------
 void GLCD_WriteCommand(unsigned char command)
 {
-while(!(GLCD_ChceckStatus()&0x03));
-GLCD_DATA_PORT = command;
+  while (!(GLCD_ChceckStatus() & 0x03))
+    ;
+  GLCD_DATA_PORT = command;
 
-GLCD_CTRL_PORT &= ~((1 << GLCD_WR) | (1 << GLCD_CE));
-ndelay();
-GLCD_CTRL_PORT |= ((1 << GLCD_WR) | (1 << GLCD_CE));
+  GLCD_CTRL_PORT &= ~((1 << GLCD_WR) | (1 << GLCD_CE));
+  ndelay();
+  GLCD_CTRL_PORT |= ((1 << GLCD_WR) | (1 << GLCD_CE));
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -70,12 +71,13 @@ GLCD_CTRL_PORT |= ((1 << GLCD_WR) | (1 << GLCD_CE));
 //-------------------------------------------------------------------------------------------------
 void GLCD_WriteData(unsigned char data)
 {
-while(!(GLCD_ChceckStatus()&0x03));
-GLCD_DATA_PORT = data;
+  while (!(GLCD_ChceckStatus() & 0x03))
+    ;
+  GLCD_DATA_PORT = data;
 
-GLCD_CTRL_PORT &= ~((1 << GLCD_WR) | (1 << GLCD_CE) | (1 << GLCD_CD));
-ndelay();
-GLCD_CTRL_PORT |= ((1 << GLCD_WR) | (1 << GLCD_CE) | (1 << GLCD_CD));
+  GLCD_CTRL_PORT &= ~((1 << GLCD_WR) | (1 << GLCD_CE) | (1 << GLCD_CD));
+  ndelay();
+  GLCD_CTRL_PORT |= ((1 << GLCD_WR) | (1 << GLCD_CE) | (1 << GLCD_CD));
 }
 //-------------------------------------------------------------------------------------------------
 //
@@ -84,16 +86,17 @@ GLCD_CTRL_PORT |= ((1 << GLCD_WR) | (1 << GLCD_CE) | (1 << GLCD_CD));
 //-------------------------------------------------------------------------------------------------
 unsigned char GLCD_ReadData(void)
 {
-uint8_t tmp;
-while(!(GLCD_ChceckStatus()&0x03));
-GLCD_DATA_DDR = 0x00;
+  uint8_t tmp;
+  while (!(GLCD_ChceckStatus() & 0x03))
+    ;
+  GLCD_DATA_DDR = 0x00;
 
-GLCD_CTRL_PORT &= ~((1 << GLCD_RD) | (1 << GLCD_CE) | (1 << GLCD_CD));
-ndelay();
-tmp = GLCD_DATA_PIN;
-GLCD_CTRL_PORT |= ((1 << GLCD_RD) | (1 << GLCD_CE) | (1 << GLCD_CD));
-GLCD_DATA_DDR = 0xFF;
-return tmp;
+  GLCD_CTRL_PORT &= ~((1 << GLCD_RD) | (1 << GLCD_CE) | (1 << GLCD_CD));
+  ndelay();
+  tmp = GLCD_DATA_PIN;
+  GLCD_CTRL_PORT |= ((1 << GLCD_RD) | (1 << GLCD_CE) | (1 << GLCD_CD));
+  GLCD_DATA_DDR = 0xFF;
+  return tmp;
 }
 //-------------------------------------------------------------------------------------------------
 //
@@ -102,9 +105,9 @@ return tmp;
 //-------------------------------------------------------------------------------------------------
 void GLCD_SetAddressPointer(unsigned int address)
 {
-GLCD_WriteData(address & 0xFF);
-GLCD_WriteData(address >> 8);
-GLCD_WriteCommand(T6963_SET_ADDRESS_POINTER);
+  GLCD_WriteData(address & 0xFF);
+  GLCD_WriteData(address >> 8);
+  GLCD_WriteCommand(T6963_SET_ADDRESS_POINTER);
 }
 //-------------------------------------------------------------------------------------------------
 //
@@ -113,12 +116,12 @@ GLCD_WriteCommand(T6963_SET_ADDRESS_POINTER);
 //-------------------------------------------------------------------------------------------------
 void GLCD_ClearText(void)
 {
-int i;
-GLCD_SetAddressPointer(GLCD_TEXT_HOME);
+  int i;
+  GLCD_SetAddressPointer(GLCD_TEXT_HOME);
 
-for(i = 0; i < GLCD_TEXT_SIZE; i++)
+  for (i = 0; i < GLCD_TEXT_SIZE; i++)
   {
-  GLCD_WriteDisplayData(0);
+    GLCD_WriteDisplayData(0);
   }
 }
 //-------------------------------------------------------------------------------------------------
@@ -128,12 +131,12 @@ for(i = 0; i < GLCD_TEXT_SIZE; i++)
 //-------------------------------------------------------------------------------------------------
 void GLCD_ClearCG(void)
 {
-unsigned int i;
-GLCD_SetAddressPointer(GLCD_EXTERNAL_CG_HOME);
+  unsigned int i;
+  GLCD_SetAddressPointer(GLCD_EXTERNAL_CG_HOME);
 
-for(i = 0; i < 256 * 8; i++)
+  for (i = 0; i < 256 * 8; i++)
   {
-  GLCD_WriteDisplayData(0);
+    GLCD_WriteDisplayData(0);
   }
 }
 //-------------------------------------------------------------------------------------------------
@@ -143,11 +146,11 @@ for(i = 0; i < 256 * 8; i++)
 //-------------------------------------------------------------------------------------------------
 void GLCD_ClearGraphic(void)
 {
-int i;
-GLCD_SetAddressPointer(GLCD_GRAPHIC_HOME);
-for(i = 0; i < GLCD_GRAPHIC_SIZE; i++)
+  int i;
+  GLCD_SetAddressPointer(GLCD_GRAPHIC_HOME);
+  for (i = 0; i < GLCD_GRAPHIC_SIZE; i++)
   {
-  GLCD_WriteDisplayData(0x00);
+    GLCD_WriteDisplayData(0x00);
   }
 }
 //-------------------------------------------------------------------------------------------------
@@ -157,31 +160,38 @@ for(i = 0; i < GLCD_GRAPHIC_SIZE; i++)
 //-------------------------------------------------------------------------------------------------
 void GLCD_WriteChar(char charCode)
 {
-GLCD_WriteDisplayData(charCode - 32);
+  GLCD_WriteDisplayData(charCode - 32);
 }
 //-------------------------------------------------------------------------------------------------
 //
 // Writes null-terminated string to display RAM memory
 //
 //-------------------------------------------------------------------------------------------------
-void GLCD_WriteString(char * string)
+void GLCD_WriteString(char *string)
 {
-while(*string)
-  {
-  GLCD_WriteChar(*string++);
-  }
+
+  GLCD_WriteChar('a');
+
+  // int count = 0;
+  // while (*string)
+  // {
+  //   count++;
+  //   GLCD_WriteChar(*string++);
+  //   if (count > 10)
+  //     break;
+  // }
 }
 //-------------------------------------------------------------------------------------------------
 //
 // Writes null-terminated string from program memory to display RAM memory
 //
 //-------------------------------------------------------------------------------------------------
-void GLCD_WriteStringPgm(char * string)
+void GLCD_WriteStringPgm(char *string)
 {
-char ch;
-while((ch = pgm_read_byte(string++)))
+  char ch;
+  while ((ch = pgm_read_byte(string++)))
   {
-  GLCD_WriteChar(ch);
+    GLCD_WriteChar(ch);
   }
 }
 //-------------------------------------------------------------------------------------------------
@@ -191,29 +201,29 @@ while((ch = pgm_read_byte(string++)))
 //-------------------------------------------------------------------------------------------------
 void GLCD_TextGoTo(unsigned char x, unsigned char y)
 {
-unsigned int address;
+  unsigned int address;
 
-address = GLCD_TEXT_HOME +  x + (GLCD_TEXT_AREA * y);
+  address = GLCD_TEXT_HOME + x + (GLCD_TEXT_AREA * y);
 
-GLCD_SetAddressPointer(address);
+  GLCD_SetAddressPointer(address);
 }
 //-------------------------------------------------------------------------------------------------
 //
 // Writes single char pattern to character generator area of display RAM memory
 //
 //-------------------------------------------------------------------------------------------------
-void GLCD_DefineCharacter(unsigned char charCode, unsigned char * defChar)
+void GLCD_DefineCharacter(unsigned char charCode, unsigned char *defChar)
 {
-unsigned int address;
-unsigned char i; 
+  unsigned int address;
+  unsigned char i;
 
-address = GLCD_EXTERNAL_CG_HOME + (8 * charCode);
+  address = GLCD_EXTERNAL_CG_HOME + (8 * charCode);
 
-GLCD_SetAddressPointer(address);
+  GLCD_SetAddressPointer(address);
 
-for(i = 0; i < 8 ; i++)
+  for (i = 0; i < 8; i++)
   {
-  GLCD_WriteDisplayData(*(defChar + i));
+    GLCD_WriteDisplayData(*(defChar + i));
   }
 }
 
@@ -224,23 +234,22 @@ for(i = 0; i < 8 ; i++)
 //-------------------------------------------------------------------------------------------------
 void GLCD_SetPixel(unsigned char x, unsigned char y, unsigned char color)
 {
-unsigned char tmp;
-unsigned int address;
+  unsigned char tmp;
+  unsigned int address;
 
-address = GLCD_GRAPHIC_HOME + (x / GLCD_FONT_WIDTH) + (GLCD_GRAPHIC_AREA * y);
+  address = GLCD_GRAPHIC_HOME + (x / GLCD_FONT_WIDTH) + (GLCD_GRAPHIC_AREA * y);
 
-GLCD_SetAddressPointer(address);
+  GLCD_SetAddressPointer(address);
 
-GLCD_WriteCommand(T6963_DATA_READ_AND_NONVARIABLE);
-tmp = GLCD_ReadData();
+  GLCD_WriteCommand(T6963_DATA_READ_AND_NONVARIABLE);
+  tmp = GLCD_ReadData();
 
-if(color)
-  tmp |= (1 <<  (GLCD_FONT_WIDTH - 1 - (x % GLCD_FONT_WIDTH)));
-else
- tmp &= ~(1 <<  (GLCD_FONT_WIDTH - 1 - (x % GLCD_FONT_WIDTH)));
+  if (color)
+    tmp |= (1 << (GLCD_FONT_WIDTH - 1 - (x % GLCD_FONT_WIDTH)));
+  else
+    tmp &= ~(1 << (GLCD_FONT_WIDTH - 1 - (x % GLCD_FONT_WIDTH)));
 
-GLCD_WriteDisplayData(tmp);
-
+  GLCD_WriteDisplayData(tmp);
 }
 //-------------------------------------------------------------------------------------------------
 //
@@ -249,8 +258,8 @@ GLCD_WriteDisplayData(tmp);
 //-------------------------------------------------------------------------------------------------
 void GLCD_WriteDisplayData(unsigned char x)
 {
-GLCD_WriteData(x);
-GLCD_WriteCommand(T6963_DATA_WRITE_AND_INCREMENT);
+  GLCD_WriteData(x);
+  GLCD_WriteCommand(T6963_DATA_WRITE_AND_INCREMENT);
 }
 //-------------------------------------------------------------------------------------------------
 //
@@ -259,27 +268,27 @@ GLCD_WriteCommand(T6963_DATA_WRITE_AND_INCREMENT);
 //-------------------------------------------------------------------------------------------------
 void GLCD_GraphicGoTo(unsigned char x, unsigned char y)
 {
-unsigned int address;
-address = GLCD_GRAPHIC_HOME + (x / GLCD_FONT_WIDTH) + (GLCD_GRAPHIC_AREA * y);
-GLCD_SetAddressPointer(address);
+  unsigned int address;
+  address = GLCD_GRAPHIC_HOME + (x / GLCD_FONT_WIDTH) + (GLCD_GRAPHIC_AREA * y);
+  GLCD_SetAddressPointer(address);
 }
 //-------------------------------------------------------------------------------------------------
 //
 // Displays bitmap from program memory
 //
 //-------------------------------------------------------------------------------------------------
-void GLCD_Bitmap(unsigned char * bitmap, unsigned char x, unsigned char y, unsigned char width, unsigned char height)
+void GLCD_Bitmap(unsigned char *bitmap, unsigned char x, unsigned char y, unsigned char width, unsigned char height)
 {
-unsigned char i, j;
+  unsigned char i, j;
 
-for(j = 0; j < height; j++)
-{
-GLCD_GraphicGoTo(x, y + j);
-for(i = 0; i < width/GLCD_FONT_WIDTH; i++)
+  for (j = 0; j < height; j++)
   {
-  GLCD_WriteDisplayData(pgm_read_byte(bitmap + i + (GLCD_GRAPHIC_AREA * j))); 	
+    GLCD_GraphicGoTo(x, y + j);
+    for (i = 0; i < width / GLCD_FONT_WIDTH; i++)
+    {
+      GLCD_WriteDisplayData(pgm_read_byte(bitmap + i + (GLCD_GRAPHIC_AREA * j)));
+    }
   }
-}
 }
 //-------------------------------------------------------------------------------------------------
 //
@@ -288,41 +297,39 @@ for(i = 0; i < width/GLCD_FONT_WIDTH; i++)
 //-------------------------------------------------------------------------------------------------
 void GLCD_Initalize(void)
 {
-GLCD_InitalizeInterface();
+  GLCD_InitalizeInterface();
 
-GLCD_CTRL_PORT &= ~(1 << GLCD_RESET);
-_delay_ms(1);
-GLCD_CTRL_PORT |= (1 << GLCD_RESET);
+  GLCD_CTRL_PORT &= ~(1 << GLCD_RESET);
+  _delay_ms(1);
+  GLCD_CTRL_PORT |= (1 << GLCD_RESET);
 
 #if (GLCD_FONT_WIDTH == 8)
-GLCD_CTRL_PORT &= ~(1 << GLCD_FS);
+  GLCD_CTRL_PORT &= ~(1 << GLCD_FS);
 #endif
 
-GLCD_WriteData(GLCD_GRAPHIC_HOME & 0xFF);
-GLCD_WriteData(GLCD_GRAPHIC_HOME >> 8);
-GLCD_WriteCommand(T6963_SET_GRAPHIC_HOME_ADDRESS);
+  GLCD_WriteData(GLCD_GRAPHIC_HOME & 0xFF);
+  GLCD_WriteData(GLCD_GRAPHIC_HOME >> 8);
+  GLCD_WriteCommand(T6963_SET_GRAPHIC_HOME_ADDRESS);
 
-GLCD_WriteData(GLCD_GRAPHIC_AREA);
-GLCD_WriteData(0x00);
-GLCD_WriteCommand(T6963_SET_GRAPHIC_AREA);
+  GLCD_WriteData(GLCD_GRAPHIC_AREA);
+  GLCD_WriteData(0x00);
+  GLCD_WriteCommand(T6963_SET_GRAPHIC_AREA);
 
-GLCD_WriteData(GLCD_TEXT_HOME);
-GLCD_WriteData(GLCD_TEXT_HOME >> 8);
-GLCD_WriteCommand(T6963_SET_TEXT_HOME_ADDRESS);
+  GLCD_WriteData(GLCD_TEXT_HOME);
+  GLCD_WriteData(GLCD_TEXT_HOME >> 8);
+  GLCD_WriteCommand(T6963_SET_TEXT_HOME_ADDRESS);
 
-GLCD_WriteData(GLCD_TEXT_AREA);
-GLCD_WriteData(0x00);
-GLCD_WriteCommand(T6963_SET_TEXT_AREA);
+  GLCD_WriteData(GLCD_TEXT_AREA);
+  GLCD_WriteData(0x00);
+  GLCD_WriteCommand(T6963_SET_TEXT_AREA);
 
-GLCD_WriteData(GLCD_OFFSET_REGISTER);
-GLCD_WriteData(0x00);
-GLCD_WriteCommand(T6963_SET_OFFSET_REGISTER);
+  GLCD_WriteData(GLCD_OFFSET_REGISTER);
+  GLCD_WriteData(0x00);
+  GLCD_WriteCommand(T6963_SET_OFFSET_REGISTER);
 
-GLCD_WriteCommand(T6963_DISPLAY_MODE  | T6963_GRAPHIC_DISPLAY_ON   | T6963_TEXT_DISPLAY_ON /*| T6963_CURSOR_DISPLAY_ON*/);
+  GLCD_WriteCommand(T6963_DISPLAY_MODE | T6963_GRAPHIC_DISPLAY_ON | T6963_TEXT_DISPLAY_ON /*| T6963_CURSOR_DISPLAY_ON*/);
 
-GLCD_WriteCommand(T6963_MODE_SET | 0);
-
+  GLCD_WriteCommand(T6963_MODE_SET | 0);
 }
-
 
 #endif
