@@ -1,3 +1,5 @@
+#ifdef xxx
+
 //-------------------------------------------------------------------------------------------------
 // Graphic LCD with Toshiba T6963 controller
 // Copyright (c) Radoslaw Kwiecien, 2007r
@@ -19,7 +21,7 @@ void n_delay(void)
   {
     asm("nop");
   }
-  delay(50);
+  // delay(1);
 }
 //-------------------------------------------------------------------------------------------------
 //
@@ -163,13 +165,19 @@ void GLCD_SetAddressPointer(unsigned int address)
 //-------------------------------------------------------------------------------------------------
 void GLCD_ClearText(void)
 {
+  Serial.println("start cleartext");
+  Serial.flush();
+
   int i;
   GLCD_SetAddressPointer(GLCD_TEXT_HOME);
 
+  Serial.println("GLCD_TEXT_SIZE " + String(GLCD_TEXT_SIZE));
+
   for (i = 0; i < GLCD_TEXT_SIZE; i++)
   {
-    GLCD_WriteDisplayData(2);
+    GLCD_WriteDisplayData(0);
   }
+  Serial.println("end cleartext");
 }
 //-------------------------------------------------------------------------------------------------
 //
@@ -216,8 +224,10 @@ void GLCD_WriteChar(char charCode)
 //-------------------------------------------------------------------------------------------------
 void GLCD_WriteString(char *string)
 {
+  Serial.println("GLCD_WriteString");
   while (*string)
   {
+    Serial.println(*string);
     GLCD_WriteChar(*string++);
   }
 }
@@ -373,7 +383,7 @@ void GLCD_Initalize(void)
     Serial.println("GLCD_WriteData(0x00) ");
   GLCD_WriteCommand(T6963_SET_OFFSET_REGISTER);
     Serial.println("T6963_SET_OFFSET_REGISTER ");
-
+delay(1000);
   GLCD_WriteCommand(T6963_DISPLAY_MODE | T6963_GRAPHIC_DISPLAY_ON | T6963_TEXT_DISPLAY_ON /*| T6963_CURSOR_DISPLAY_ON*/);
     Serial.println("T6963_DISPLAY_MODE ");
 
@@ -383,3 +393,4 @@ void GLCD_Initalize(void)
     Serial.println("GLCD_Initalize END");
   
 }
+#endif

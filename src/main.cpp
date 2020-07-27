@@ -13,25 +13,24 @@ void setup()
 
  Serial.println("Once");
     GLCD_Initalize();                     // Initalize LCD
-    Serial.println("GLCD_Initalize");
+    Serial.println("GLCD_Initalize END");
 
-    // GLCD_TextGoTo(0, 0);                  // set text coordinates
-    // Serial.println("GLCD_TextGoTo");
-    // GLCD_WriteString("Hello world !!! "); // write text
-    // Serial.println("GLCD_WriteString");
-
-
-
+ 
     GLCD_ClearText();                     // Clear text area
     Serial.println("GLCD_ClearText");
     GLCD_ClearCG();                       // Clear character generator area
     Serial.println("GLCD_ClearCG");
     GLCD_ClearGraphic();                  // Clear graphic area
     Serial.println("GLCD_ClearGraphic");
+    Serial.flush();
     GLCD_TextGoTo(0, 0);                  // set text coordinates
     Serial.println("GLCD_TextGoTo");
     GLCD_WriteString("Hello world !!! "); // write text
     Serial.println("GLCD_WriteString");
+    
+    Serial.println("MAIN Done");
+    
+    Serial.flush();
 
 }
 

@@ -12,6 +12,11 @@
 #include <util/delay.h>
 
 // data port
+
+#define GLCD_DATA_PORT PORTL
+#define GLCD_DATA_PIN PINL
+#define GLCD_DATA_DDR DDRL
+
 #define GLCD_DATA_PORT1 PORTL
 #define GLCD_DATA_PIN1 PINL
 #define GLCD_DATA_DDR1 DDRL
