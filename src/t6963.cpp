@@ -6,6 +6,7 @@
 // http://en.radzio.dxp.pl/t6963/
 // Compiler : avr-gcc
 //-------------------------------------------------------------------------------------------------
+#include "Arduino.h"
 #include "GDT6963C.h"
 //-------------------------------------------------------------------------------------------------
 //
@@ -46,6 +47,7 @@ unsigned char GLCD_ChceckStatus(void)
   tmp = GLCD_DATA_PIN;
   GLCD_DATA_DDR = 0xFF;
   GLCD_CTRL_PORT |= ((1 << GLCD_RD) | (1 << GLCD_CE));
+
   return tmp;
 }
 //-------------------------------------------------------------------------------------------------
@@ -55,8 +57,7 @@ unsigned char GLCD_ChceckStatus(void)
 //-------------------------------------------------------------------------------------------------
 void GLCD_WriteCommand(unsigned char command)
 {
-  while (!(GLCD_ChceckStatus() & 0x03))
-    ;
+  while (!(GLCD_ChceckStatus() & 0x03));
   GLCD_DATA_PORT = command;
 
   GLCD_CTRL_PORT &= ~((1 << GLCD_WR) | (1 << GLCD_CE));
@@ -71,8 +72,8 @@ void GLCD_WriteCommand(unsigned char command)
 //-------------------------------------------------------------------------------------------------
 void GLCD_WriteData(unsigned char data)
 {
-  while (!(GLCD_ChceckStatus() & 0x03))
-    ;
+  while (!(GLCD_ChceckStatus() & 0x03));
+
   GLCD_DATA_PORT = data;
 
   GLCD_CTRL_PORT &= ~((1 << GLCD_WR) | (1 << GLCD_CE) | (1 << GLCD_CD));
@@ -169,17 +170,32 @@ void GLCD_WriteChar(char charCode)
 //-------------------------------------------------------------------------------------------------
 void GLCD_WriteString(char *string)
 {
+  // String s = String(*string);
+  // Serial.println(s);
 
-  GLCD_WriteChar('a');
+  //  GLCD_WriteChar('x');
+  //  GLCD_WriteChar(*string);
+  //  string++;
+  //  GLCD_WriteChar(*string);
+  //  string++;
+  //  GLCD_WriteChar(*string);
+  //  string++;
+  //  GLCD_WriteChar(*string);
+  //  string++;
+  //  if (*string == 0)
+  //  {
+  //   GLCD_WriteChar('q');
+  //  } else {
+  //    GLCD_WriteChar(*string);
+  //  }
+  //  string++;
+  // GLCD_WriteChar('x');
 
-  // int count = 0;
-  // while (*string)
-  // {
-  //   count++;
-  //   GLCD_WriteChar(*string++);
-  //   if (count > 10)
-  //     break;
-  // }
+  while (*string != 0)
+  {
+    GLCD_WriteChar(*string);
+    string++;
+  }
 }
 //-------------------------------------------------------------------------------------------------
 //
@@ -297,7 +313,10 @@ void GLCD_Bitmap(unsigned char *bitmap, unsigned char x, unsigned char y, unsign
 //-------------------------------------------------------------------------------------------------
 void GLCD_Initalize(void)
 {
+  Serial.println("GLCD_Initalize");
+
   GLCD_InitalizeInterface();
+  Serial.println("GLCD_InitalizeInterface");
 
   GLCD_CTRL_PORT &= ~(1 << GLCD_RESET);
   _delay_ms(1);
@@ -307,7 +326,10 @@ void GLCD_Initalize(void)
   GLCD_CTRL_PORT &= ~(1 << GLCD_FS);
 #endif
 
+  Serial.println("sssssGLCD_GRAPHIC_HOME");
   GLCD_WriteData(GLCD_GRAPHIC_HOME & 0xFF);
+  Serial.println("GLCD_GRAPHIC_HOME");
+
   GLCD_WriteData(GLCD_GRAPHIC_HOME >> 8);
   GLCD_WriteCommand(T6963_SET_GRAPHIC_HOME_ADDRESS);
 

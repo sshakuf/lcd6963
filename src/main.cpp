@@ -11,30 +11,17 @@ void setup()
 
   Serial.println("__________________________________________________________________");
 
-  Serial.flush();
-  Serial.println("Once");
-
   GLCD_Initalize(); // Initalize LCD
-  Serial.println("GLCD_Initalize END");
-
   GLCD_ClearText(); // Clear text area
-  Serial.println("GLCD_ClearText");
   GLCD_ClearCG(); // Clear character generator area
-  Serial.println("GLCD_ClearCG");
   GLCD_ClearGraphic(); // Clear graphic area
-  Serial.println("GLCD_ClearGraphic");
-  Serial.flush();
   GLCD_TextGoTo(0, 0); // set text coordinates
-  Serial.println("GLCD_TextGoTo");
-  GLCD_WriteString("Hello world !!! "); // write text
-  Serial.println("GLCD_WriteString");
-
-  Serial.println("MAIN Done");
+  GLCD_WriteString("Hello world this is a test"); // write text
 
   Serial.flush();
 }
 
-bool once = false;
+int counter = 0;
 
 void loop()
 {
@@ -51,28 +38,14 @@ void loop()
   // digitalWrite(24, HIGH); // turn the LED on (HIGH is the voltage level)
 
   digitalWrite(LED_BUILTIN, HIGH); // turn the LED on (HIGH is the voltage level)
+  GLCD_TextGoTo(0, 1); // set text coordinates
+  String s = String(counter);
+  counter++;
+  GLCD_WriteString(s.c_str()); // write text
 
-  if (!once)
-  {
-    // Serial.println("Once");
-    // GLCD_Initalize();                     // Initalize LCD
-    // Serial.println("GLCD_Initalize");
-    // GLCD_ClearText();                     // Clear text area
-    // Serial.println("GLCD_ClearText");
-    // GLCD_ClearCG();                       // Clear character generator area
-    // Serial.println("GLCD_ClearCG");
-    // GLCD_ClearGraphic();                  // Clear graphic area
-    // Serial.println("GLCD_ClearGraphic");
-    // GLCD_TextGoTo(0, 0);                  // set text coordinates
-    // Serial.println("GLCD_TextGoTo");
-    // GLCD_WriteString("Hello world !!! "); // write text
-    // Serial.println("GLCD_WriteString");
-    // once = true;
-  }
-
-  delay(1000);                    // wait for a second
+  delay(300);                    // wait for a second
   digitalWrite(LED_BUILTIN, LOW); // turn the LED off by making the voltage LOW
-  delay(1000);                    // wait for a second
+  delay(300);                    // wait for a second
 
   //  delay(1000);
   //  GLCD_TextGoTo(3, 3);         // set text coordinates

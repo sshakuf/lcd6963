@@ -21,7 +21,6 @@ void n_delay(void)
   {
     asm("nop");
   }
-  // delay(1);
 }
 //-------------------------------------------------------------------------------------------------
 //
@@ -224,22 +223,11 @@ void GLCD_WriteChar(char charCode)
 //-------------------------------------------------------------------------------------------------
 void GLCD_WriteString(char *string)
 {
-  Serial.println("GLCD_WriteString");
-  GLCD_WriteChar('a');
-  GLCD_WriteChar('a');
-  GLCD_WriteChar('a');
-  GLCD_WriteChar('a');
-  GLCD_WriteChar('a');
-  GLCD_WriteChar('a');
-  GLCD_WriteChar('a');
-  GLCD_WriteChar('a');
-  GLCD_WriteChar('a');
 
-  // while (*string)
-  // {
-  //   Serial.println(*string);
-  //   GLCD_WriteChar(*string++);
-  // }
+  while (*string)
+  {
+    GLCD_WriteChar(*string++);
+  }
 }
 //-------------------------------------------------------------------------------------------------
 //
@@ -393,7 +381,6 @@ void GLCD_Initalize(void)
   Serial.println("GLCD_WriteData(0x00) ");
   GLCD_WriteCommand(T6963_SET_OFFSET_REGISTER);
   Serial.println("T6963_SET_OFFSET_REGISTER ");
-  delay(1000);
   GLCD_WriteCommand(T6963_DISPLAY_MODE | T6963_GRAPHIC_DISPLAY_ON | T6963_TEXT_DISPLAY_ON /*| T6963_CURSOR_DISPLAY_ON*/);
   Serial.println("T6963_DISPLAY_MODE ");
 
