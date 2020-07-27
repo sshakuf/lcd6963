@@ -5,6 +5,7 @@
 // Compiler : avr-gcc
 // Modified By -Gil- to work on Arduino easily : http://domoduino.tumblr.com/
 //-------------------------------------------------------------------------------------------------
+#include "arduino.h"
 #include "GDT6963C.h"
 //-------------------------------------------------------------------------------------------------
 //
@@ -18,6 +19,7 @@ void n_delay(void)
   {
     asm("nop");
   }
+  delay(50);
 }
 //-------------------------------------------------------------------------------------------------
 //
@@ -26,10 +28,11 @@ void n_delay(void)
 //-------------------------------------------------------------------------------------------------
 void GLCD_InitalizeInterface(void)
 {
+  Serial.println("GLCD_InitalizeInterface");
   //GLCD_DATA_DDR = 0xFF;
   GLCD_DATA_DDR1 |= GLCD_DATA_MASK1;
   // GLCD_DATA_DDR2 |= GLCD_DATA_MASK2;
-
+  
   GLCD_CTRL_DDR = ((1 << GLCD_WR) | (1 << GLCD_RD) | (1 << GLCD_CE) | (1 << GLCD_CD) | (1 << GLCD_RESET) | (1 << GLCD_FS));
   GLCD_CTRL_PORT |= ((1 << GLCD_WR) | (1 << GLCD_RD) | (1 << GLCD_CE) | (1 << GLCD_CD) | (1 << GLCD_RESET) | (1 << GLCD_FS));
 }
@@ -41,19 +44,30 @@ void GLCD_InitalizeInterface(void)
 unsigned char GLCD_ChceckStatus(void)
 {
   uint8_t tmp;
-  //GLCD_DATA_DDR = 0x00;
+
+  // Serial.println("GLCD_ChceckStatus");
+
   GLCD_DATA_DDR1 &= ~GLCD_DATA_MASK1;
-  // GLCD_DATA_DDR2 &= ~GLCD_DATA_MASK2;
+
+  // int x = 0xff;
+  // x &= ~((1 << GLCD_RD) | (1 << GLCD_CE)); 
+  // Serial.println( String(x, BIN) );
 
   GLCD_CTRL_PORT &= ~((1 << GLCD_RD) | (1 << GLCD_CE));
+  // Serial.println( "GLCD_CTRL_PORT " +String(GLCD_CTRL_PORT, BIN) );
+
   n_delay();
-  //tmp = GLCD_DATA_PIN;
+  // delay(50);
+
   tmp = (GLCD_DATA_PIN1);
-  // tmp = (GLCD_DATA_PIN1 GLCD_DATA_RSHIFT1) | (GLCD_DATA_PIN2 GLCD_DATA_RSHIFT2);
-  //GLCD_DATA_DDR = 0xFF;
+  // Serial.println("tmp " + String(tmp, BIN));
+  // Serial.println("tmp " + String(tmp));
+
   GLCD_DATA_DDR1 |= GLCD_DATA_MASK1;
-  // GLCD_DATA_DDR2 |= GLCD_DATA_MASK2;
+  // Serial.println("GLCD_DATA_DDR1 - " + String(GLCD_DATA_DDR1, BIN));
   GLCD_CTRL_PORT |= ((1 << GLCD_RD) | (1 << GLCD_CE));
+  // Serial.println( "GLCD_CTRL_PORT " + String(GLCD_CTRL_PORT, BIN) );
+
   return tmp;
 }
 //-------------------------------------------------------------------------------------------------
@@ -63,8 +77,10 @@ unsigned char GLCD_ChceckStatus(void)
 //-------------------------------------------------------------------------------------------------
 void GLCD_WriteCommand(unsigned char command)
 {
-  while (!(GLCD_ChceckStatus() & 0x03))
+
+  while (!(GLCD_ChceckStatus() ))
     ;
+  // Serial.println("GLCD_WriteCommand - " + String(command, HEX));
 
   // GLCD_DATA_PORT = command;
   GLCD_DATA_PORT1 &= ~GLCD_DATA_MASK1;
@@ -85,8 +101,10 @@ void GLCD_WriteCommand(unsigned char command)
 //-------------------------------------------------------------------------------------------------
 void GLCD_WriteData(unsigned char data)
 {
-  while (!(GLCD_ChceckStatus() & 0x03))
+  while (!(GLCD_ChceckStatus()))
     ;
+  // Serial.println("GLCD_WriteData - " + String(data, HEX));
+
   // GLCD_DATA_PORT = data;
   GLCD_DATA_PORT1 &= ~GLCD_DATA_MASK1;
   GLCD_DATA_PORT1 |= (data);
@@ -106,7 +124,7 @@ void GLCD_WriteData(unsigned char data)
 unsigned char GLCD_ReadData(void)
 {
   uint8_t tmp;
-  while (!(GLCD_ChceckStatus() & 0x03))
+  while (!(GLCD_ChceckStatus() ))
     ;
   //GLCD_DATA_DDR = 0x00;
   GLCD_DATA_DDR1 &= ~GLCD_DATA_MASK1;
@@ -114,7 +132,7 @@ unsigned char GLCD_ReadData(void)
 
   GLCD_CTRL_PORT &= ~((1 << GLCD_RD) | (1 << GLCD_CE) | (1 << GLCD_CD));
   n_delay();
-
+  
   //tmp = GLCD_DATA_PIN;
   tmp = GLCD_DATA_PIN1;
   // tmp = (GLCD_DATA_PIN1 GLCD_DATA_RSHIFT1) | (GLCD_DATA_PIN2 GLCD_DATA_RSHIFT2);
@@ -122,6 +140,8 @@ unsigned char GLCD_ReadData(void)
   //GLCD_DATA_DDR = 0xFF;
   GLCD_DATA_DDR1 |= GLCD_DATA_MASK1;
   // GLCD_DATA_DDR2 |= GLCD_DATA_MASK2;
+
+  // Serial.println("GLCD_ReadData - " + String(tmp, HEX));
 
   return tmp;
 }
@@ -148,7 +168,7 @@ void GLCD_ClearText(void)
 
   for (i = 0; i < GLCD_TEXT_SIZE; i++)
   {
-    GLCD_WriteDisplayData(0);
+    GLCD_WriteDisplayData(2);
   }
 }
 //-------------------------------------------------------------------------------------------------
@@ -317,6 +337,7 @@ void GLCD_Bitmap(unsigned char *bitmap, unsigned char x, unsigned char y, unsign
 //-------------------------------------------------------------------------------------------------
 void GLCD_Initalize(void)
 {
+    Serial.println("GLCD_Initalize");
 
   GLCD_InitalizeInterface();
 
@@ -344,11 +365,21 @@ void GLCD_Initalize(void)
   GLCD_WriteData(0x00);
   GLCD_WriteCommand(T6963_SET_TEXT_AREA);
 
+    Serial.println("T6963_SET_TEXT_AREA ");
+
   GLCD_WriteData(GLCD_OFFSET_REGISTER);
+    Serial.println("GLCD_OFFSET_REGISTER ");
   GLCD_WriteData(0x00);
+    Serial.println("GLCD_WriteData(0x00) ");
   GLCD_WriteCommand(T6963_SET_OFFSET_REGISTER);
+    Serial.println("T6963_SET_OFFSET_REGISTER ");
 
   GLCD_WriteCommand(T6963_DISPLAY_MODE | T6963_GRAPHIC_DISPLAY_ON | T6963_TEXT_DISPLAY_ON /*| T6963_CURSOR_DISPLAY_ON*/);
+    Serial.println("T6963_DISPLAY_MODE ");
 
   GLCD_WriteCommand(T6963_MODE_SET | 0);
+    Serial.println("T6963_MODE_SET ");
+
+    Serial.println("GLCD_Initalize END");
+  
 }

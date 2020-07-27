@@ -8,28 +8,30 @@
 
 #include <inttypes.h>
 #include <avr/io.h>
+//#include <Arduino.h>
 #include <avr/pgmspace.h>
 #include <util/delay.h>
 
 // data port
-#define GLCD_DATA_PORT1 PORTD
-#define GLCD_DATA_PIN1 PIND
-#define GLCD_DATA_DDR1 DDRD
-#define GLCD_DATA_SHIFT1 << 2
-#define GLCD_DATA_RSHIFT1 >> 2
-#define GLCD_DATA_MASK1 0xFC
+#define GLCD_DATA_PORT1 PORTL
+#define GLCD_DATA_PIN1 PINL
+#define GLCD_DATA_DDR1 DDRL
+// #define GLCD_DATA_SHIFT1 << 2
+// #define GLCD_DATA_RSHIFT1 >> 2
+// #define GLCD_DATA_MASK1 0xFC
+#define GLCD_DATA_MASK1 0xFF
 
-#define GLCD_DATA_PORT2 PORTB
-#define GLCD_DATA_PIN2 PINB
-#define GLCD_DATA_DDR2 DDRB
-#define GLCD_DATA_SHIFT2 >> 6
-#define GLCD_DATA_RSHIFT2 << 6
-#define GLCD_DATA_MASK2 0x03
+// #define GLCD_DATA_PORT2 PORTB
+// #define GLCD_DATA_PIN2 PINB
+// #define GLCD_DATA_DDR2 DDRB
+// #define GLCD_DATA_SHIFT2 >> 6
+// #define GLCD_DATA_RSHIFT2 << 6
+// #define GLCD_DATA_MASK2 0x03
 
 // control port
-#define GLCD_CTRL_PORT PORTC
-#define GLCD_CTRL_PIN PINC
-#define GLCD_CTRL_DDR DDRC
+#define GLCD_CTRL_PORT PORTA
+#define GLCD_CTRL_PIN PINA
+#define GLCD_CTRL_DDR DDRA
 // control signals
 #define GLCD_WR 0
 #define GLCD_RD 1
@@ -37,6 +39,13 @@
 #define GLCD_CD 3
 #define GLCD_RESET 4
 #define GLCD_FS 5
+// #define GLCD_WR 0   37
+// #define GLCD_RD 1   36
+// #define GLCD_CE 2   35
+// #define GLCD_CD 3   34
+// #define GLCD_RESET 4 33
+// #define GLCD_FS 5    32
+
 // display properties
 #define GLCD_NUMBER_OF_LINES 64
 #define GLCD_PIXELS_PER_LINE 240
