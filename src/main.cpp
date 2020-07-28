@@ -18,10 +18,22 @@ void setup()
   GLCD_TextGoTo(0, 0); // set text coordinates
   GLCD_WriteString("Hello world this is a test"); // write text
 
+  GLCD_SetAddressPointer(GLCD_GRAPHIC_HOME);
+  for (int i = 0; i < GLCD_GRAPHIC_SIZE; i++)
+  {
+    GLCD_WriteDisplayData(i);
+  }
+
+
   Serial.flush();
 }
 
 int counter = 0;
+
+void put88(int x,int y, char* line)
+{
+  
+}
 
 void loop()
 {
@@ -46,6 +58,8 @@ void loop()
   delay(300);                    // wait for a second
   digitalWrite(LED_BUILTIN, LOW); // turn the LED off by making the voltage LOW
   delay(300);                    // wait for a second
+ 
+
 
   //  delay(1000);
   //  GLCD_TextGoTo(3, 3);         // set text coordinates

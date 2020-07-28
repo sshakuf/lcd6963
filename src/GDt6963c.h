@@ -122,3 +122,6 @@ void GLCD_DefineCharacter(unsigned char, unsigned char *);
 void GLCD_Initalize(void);
 void GLCD_SetPixel(unsigned char, unsigned char, unsigned char);
 void GLCD_WriteDisplayData(unsigned char);
+
+
+void GLCD_SetAddressPointer(unsigned int address);
